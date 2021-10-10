@@ -12,7 +12,7 @@ model User {
   name      String
   email     String    @unique
   password  String
-  avatar    File?     @relation(fields: [avatarId], references: [id])
+  avatar    File?     @relation(fields: [avatarId], references: [id], onDelete: SetNull)
   avatarId  String?   @unique
   role      Role      @default(USER)
   verified  Boolean   @default(false)
@@ -21,6 +21,8 @@ model User {
   sessions  Session[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  @@map("users")
 }
 
 model Session {
@@ -28,6 +30,8 @@ model Session {
   expiresIn Int
   user      User   @relation(fields: [userId], references: [id])
   userId    String
+
+  @@map("sessions")
 }
 
 model Project {
@@ -35,20 +39,24 @@ model Project {
   title       String
   description String
   status      Status
-  author      User     @relation(fields: [authorId], references: [id])
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@map("projects")
 }
 
 model File {
   id          String   @id @default(uuid())
   filename    String   @unique
-  filenameUrl String   @unique
+  filenameUrl String
   type        String
   size        Int
   author      User?
   createdAt   DateTime @default(now())
+
+  @@map("files")
 }
 
 enum Role {

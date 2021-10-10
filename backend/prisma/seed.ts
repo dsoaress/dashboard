@@ -84,9 +84,7 @@ async function main() {
           }
         },
         projects: {
-          createMany: {
-            data
-          }
+          createMany: { data }
         },
         createdAt
       }
