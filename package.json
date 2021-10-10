@@ -1,0 +1,24 @@
+{
+  "name": "dashboard",
+  "author": "Daniel Soares <daniel.soares@me.com>",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "lerna run dev",
+    "dev:back": "lerna run dev --scope backend",
+    "dev:front": "lerna run dev --scope frontend",
+    "build": "lerna run build",
+    "build:back": "lerna run build --scope backend",
+    "build:front": "lerna run build --scope frontend",
+    "start": "lerna run start",
+    "start:back": "lerna run start --scope backend",
+    "start:front": "lerna run start --scope frontend",
+    "prisma:push": "lerna run prisma:push --scope backend",
+    "clean": "lerna run clean && rm -rf node_modules",
+    "lint": "lerna run lint",
+    "postinstall": "lerna bootstrap"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
