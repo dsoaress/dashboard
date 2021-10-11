@@ -15,9 +15,9 @@ export class CreateUserDto {
   password: string
 
   @IsOptional()
-  avatar: string
+  avatar?: string
 
   @IsEnum(Role)
   @IsOptional()
-  role: Role
+  role?: Role
 }

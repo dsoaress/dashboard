@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { Role } from '@prisma/client'
 import { hashSync } from 'bcryptjs'
 import { v4 as uuid } from 'uuid'
 
@@ -10,7 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto'
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, userRole?: Role) {
     const emailExists = await this.prisma.user.findUnique({
       where: {
         email: createUserDto.email
@@ -21,17 +22,23 @@ export class UserService {
       throw new BadRequestException('email already used')
     }
 
+    if (createUserDto.role === 'ADMIN' && userRole !== 'ADMIN') {
+      delete createUserDto.role
+    }
+
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
         password: hashSync(createUserDto.password, 8),
         avatar: {
-          create: {
-            filename: uuid() + createUserDto.avatar,
-            filenameUrl: createUserDto.avatar,
-            size: 0,
-            type: ''
-          }
+          create: createUserDto.avatar
+            ? {
+                filename: uuid() + createUserDto.avatar,
+                filenameUrl: createUserDto.avatar,
+                size: 2 * 1024 * 1024, // fake size 2MB
+                type: 'jpeg' // fake type
+              }
+            : undefined
         }
       },
       include: {

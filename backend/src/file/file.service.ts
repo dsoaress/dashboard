@@ -8,16 +8,16 @@ import { CreateFileDto } from './dto/create-file.dto'
 export class FileService {
   constructor(private prisma: PrismaService) {}
 
-  async create({ filename }: CreateFileDto) {
+  async create(userId: string, { filename }: CreateFileDto) {
     const file = await this.prisma.file.create({
       data: {
         filename: uuid() + filename,
         filenameUrl: filename,
-        size: 0,
-        type: '',
+        size: 2 * 1024 * 1024, // fake size 2MB
+        type: 'jpeg', // fake type
         author: {
           connect: {
-            id: '97a25bd1-f35c-40cf-b9e9-2369bfccb875'
+            id: userId
           }
         }
       },

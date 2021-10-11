@@ -6,10 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common'
+import { Role, User } from '@prisma/client'
 
+import { Public } from '../common/decorators/public-route.decorator'
+import { Roles } from '../common/decorators/roles.decorator'
 import { ParametersPipe } from '../common/pipes/parameters.pipe'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -19,29 +23,34 @@ import { UserService } from './user.service'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @Post()
   @UsePipes(ValidationPipe)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto)
+  create(@Req() { user }: { user?: User }, @Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto, user?.role)
   }
 
   @Get()
+  @Roles(Role.ADMIN)
   findAll() {
     return this.userService.findAll()
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN)
   findOne(@Param('id', ParametersPipe) id: string) {
     return this.userService.findOne(id)
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
   @UsePipes(ValidationPipe)
   update(@Param('id', ParametersPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto)
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   remove(@Param('id', ParametersPipe) id: string) {
     return this.userService.remove(id)
   }

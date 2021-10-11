@@ -5,9 +5,11 @@ import {
   Get,
   Param,
   Post,
+  Req,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common'
+import { User } from '@prisma/client'
 
 import { ParametersPipe } from '../common/pipes/parameters.pipe'
 import { CreateFileDto } from './dto/create-file.dto'
@@ -19,8 +21,8 @@ export class FileController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  create(@Body() createFileDto: CreateFileDto) {
-    return this.fileService.create(createFileDto)
+  create(@Req() { user }: { user: User }, @Body() createFileDto: CreateFileDto) {
+    return this.fileService.create(user.id, createFileDto)
   }
 
   @Get()

@@ -62,9 +62,13 @@ model File {
 enum Role {
   USER
   ADMIN
+
+  @@map("roles")
 }
 
 enum Status {
   OPEN
   CLOSED
+
+  @@map("status")
 }

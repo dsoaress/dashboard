@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { NotFoundError } from 'rxjs'
 
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateProjectDto } from './dto/create-project.dto'

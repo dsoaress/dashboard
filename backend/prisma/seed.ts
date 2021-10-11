@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { hashSync } from 'bcryptjs'
 import { date, internet, lorem, name as fakerName, random } from 'faker'
+import { v4 as uuid } from 'uuid'
 
 const prisma = new PrismaClient()
 
@@ -31,15 +32,15 @@ async function main() {
           create: {
             filename: ADMIN_AVATAR,
             filenameUrl: ADMIN_AVATAR,
-            size: 0,
-            type: ''
+            size: 2 * 1024 * 1024, // fake size 2MB
+            type: 'jpeg' // fake type
           }
         },
         role: 'ADMIN'
       }
     })
 
-    console.log('Created admin')
+    console.log('Admin created')
   }
 
   for (let i = 2; i <= USERS_QUANTITY; i++) {
@@ -53,44 +54,50 @@ async function main() {
     const projects = random.arrayElement([1, 3, 5, 10])
     const createdAt = date.past()
 
-    for (let i = 1; i <= projects; i++) {
-      const title = lorem.sentence()
-      const description = lorem.sentences(8)
-      const statusOptions = ['OPEN', 'CLOSED']
-      const status = random.arrayElement(statusOptions)
-      const createdAt = date.past()
-
-      const project = {
-        title,
-        description,
-        status,
-        createdAt
-      }
-
-      data.push(project)
-    }
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password,
-        avatar: {
-          create: {
-            filename: avatar,
-            filenameUrl: avatar,
-            size: 0,
-            type: ''
-          }
-        },
-        projects: {
-          createMany: { data }
-        },
-        createdAt
-      }
+    const emailExists = await prisma.user.findUnique({
+      where: { email }
     })
 
-    console.log(`Created user with id ${user.id}`)
+    if (!emailExists) {
+      for (let i = 1; i <= projects; i++) {
+        const title = lorem.sentence()
+        const description = lorem.sentences(8)
+        const statusOptions = ['OPEN', 'CLOSED']
+        const status = random.arrayElement(statusOptions)
+        const createdAt = date.past()
+
+        const project = {
+          title,
+          description,
+          status,
+          createdAt
+        }
+
+        data.push(project)
+      }
+
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          password,
+          avatar: {
+            create: {
+              filename: uuid() + avatar,
+              filenameUrl: avatar,
+              size: 2 * 1024 * 1024, // fake size 2MB
+              type: 'jpeg' // fake type
+            }
+          },
+          projects: {
+            createMany: { data }
+          },
+          createdAt
+        }
+      })
+
+      console.log(`User created: ${i} of ${USERS_QUANTITY}`)
+    }
   }
 }
 
