@@ -6,6 +6,7 @@ import { AppController } from './app.controller'
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
 import { RolesGuard } from './common/guards/roles.guard'
 import { FileModule } from './file/file.module'
+import { MeModule } from './me/me.module'
 import { ProjectModule } from './project/project.module'
 import { SessionModule } from './session/session.module'
 import { UserModule } from './user/user.module'
@@ -16,7 +17,8 @@ import { UserModule } from './user/user.module'
     UserModule,
     ProjectModule,
     FileModule,
-    SessionModule
+    SessionModule,
+    MeModule
   ],
   controllers: [AppController],
   providers: [
