@@ -30,5 +30,6 @@
   "engines": {
     "node": "16.x",
     "yarn": "1.x"
-  }
+  },
+  "version": "0.0.1"
 }
