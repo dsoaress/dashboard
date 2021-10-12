@@ -8,6 +8,7 @@
     "dev:back": "lerna run dev --scope backend --stream",
     "dev:front": "lerna run dev --scope frontend --stream",
     "build": "lerna run build --stream",
+    "heroku-postbuild": "yarn build:back",
     "build:back": "lerna run build --scope backend --stream",
     "build:front": "lerna run build --scope frontend --stream",
     "prestart": "yarn build",
@@ -22,6 +23,11 @@
     "postinstall": "lerna bootstrap"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "@nestjs/cli": "8.1.2",
+    "lerna": "4.0.0"
+  },
+  "engines": {
+    "node": "16.x",
+    "yarn": "1.x"
   }
 }

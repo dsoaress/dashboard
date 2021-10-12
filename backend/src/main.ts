@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core'
+import helmet from 'helmet'
 
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/filters/http-exception.filter'
@@ -9,7 +10,8 @@ async function bootstrap() {
     logger: ['error', 'warn']
   })
   app.useGlobalFilters(new AllExceptionsFilter())
-  await app.listen(3010)
+  app.use(helmet())
+  await app.listen(process.env.PORT || 3010)
 }
 
 bootstrap()

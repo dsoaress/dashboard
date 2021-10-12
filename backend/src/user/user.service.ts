@@ -59,7 +59,10 @@ export class UserService {
   async findAll() {
     const users = await this.prisma.user.findMany({
       orderBy: { name: 'asc' },
-      include: { avatar: true }
+      include: {
+        avatar: true,
+        projects: true
+      }
     })
 
     return users.map(user => ({
@@ -68,6 +71,14 @@ export class UserService {
       email: user.email,
       avatar: user.avatar?.filenameUrl ?? null,
       role: user.role,
+      projects: user.projects.map(project => ({
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        status: project.status,
+        createdAt: project.createdAt,
+        updatedAt: project.updatedAt
+      })),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     }))
