@@ -1,12 +1,13 @@
 import { GetServerSideProps, NextPage } from 'next'
 
+import { Layout } from '../components/Layout'
 import { authenticatedUserRoute } from '../utils/authenticatedUserRoute'
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Home</h1>
-    </div>
+    </Layout>
   )
 }
 

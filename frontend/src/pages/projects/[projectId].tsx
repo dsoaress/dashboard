@@ -2,6 +2,7 @@ import { GetServerSideProps, NextPage } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
 
+import { Layout } from '../../components/Layout'
 import { useProject } from '../../hooks/useQuery'
 import { authenticatedUserRoute } from '../../utils/authenticatedUserRoute'
 
@@ -11,20 +12,20 @@ const Project: NextPage = () => {
 
   const { project, isLoading } = useProject(projectId)
 
-  if (isLoading) {
-    return <p>Loading...</p>
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>
+  // }
 
-  if (!project) {
-    return <DefaultErrorPage statusCode={404} />
-  }
+  // if (!project) {
+  //   return <DefaultErrorPage statusCode={404} />
+  // }
 
   return (
-    <div>
+    <Layout>
       <h1>Id: {project?.id}</h1>
       <h1>title: {project?.title}</h1>
       <h1>Description: {project?.description}</h1>
-    </div>
+    </Layout>
   )
 }
 

@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next'
 
+import { Layout } from '../../components/Layout'
 import { Link } from '../../components/Link'
 import { useProjects } from '../../hooks/useQuery'
 import { prefetchProjectById } from '../../services/api'
@@ -9,7 +10,7 @@ const Users: NextPage = () => {
   const { projects } = useProjects()
 
   return (
-    <div>
+    <Layout>
       <h1>Projects</h1>
       <ul>
         {projects?.map(project => (
@@ -23,7 +24,7 @@ const Users: NextPage = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </Layout>
   )
 }
 

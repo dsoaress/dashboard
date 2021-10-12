@@ -2,6 +2,7 @@ import { GetServerSideProps, NextPage } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
 
+import { Layout } from '../../components/Layout'
 import { useUser } from '../../hooks/useQuery'
 import { authenticatedUserRoute } from '../../utils/authenticatedUserRoute'
 
@@ -11,20 +12,20 @@ const User: NextPage = () => {
 
   const { user, isLoading } = useUser(userId)
 
-  if (isLoading) {
-    return <p>Loading...</p>
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>
+  // }
 
-  if (!user) {
-    return <DefaultErrorPage statusCode={404} />
-  }
+  // if (!user) {
+  //   return <DefaultErrorPage statusCode={404} />
+  // }
 
   return (
-    <div>
+    <Layout>
       <h1>Id: {user?.id}</h1>
       <h1>User: {user?.name}</h1>
       <h1>Email: {user?.email}</h1>
-    </div>
+    </Layout>
   )
 }
 
