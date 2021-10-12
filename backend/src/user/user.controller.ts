@@ -31,13 +31,11 @@ export class UserController {
   }
 
   @Get()
-  @Roles(Role.ADMIN)
   findAll() {
     return this.userService.findAll()
   }
 
   @Get(':id')
-  @Roles(Role.ADMIN)
   findOne(@Param('id', ParametersPipe) id: string) {
     return this.userService.findOne(id)
   }

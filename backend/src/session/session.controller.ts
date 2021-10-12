@@ -30,7 +30,7 @@ export class SessionController {
   @HttpCode(200)
   @Post('refresh-token')
   @UsePipes(ValidationPipe)
-  async refreshToken(@Body() refreshSessionDto: RefreshSessionDto) {
-    return await this.sessionService.refresh(refreshSessionDto)
+  refreshToken(@Body() refreshSessionDto: RefreshSessionDto) {
+    return this.sessionService.refresh(refreshSessionDto)
   }
 }
