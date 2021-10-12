@@ -1,3 +1,5 @@
+import { Project } from './Project'
+
 export type Role = 'ADMIN' | 'USER'
 
 export type User = {
@@ -6,6 +8,7 @@ export type User = {
   email: string
   avatar?: string
   role: Role
+  projects: Omit<Project[], 'author'>
   createdAt: string
   updatedAt: string
 }

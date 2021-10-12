@@ -6,7 +6,7 @@ import { Link } from './Link'
 import { ProfileCard } from './ProfileCard'
 
 export function Header() {
-  const { me, signOut } = useAuth()
+  const { signOut } = useAuth()
 
   return (
     <Flex justify="space-between" align="center" h={32}>
@@ -22,7 +22,7 @@ export function Header() {
       </HStack>
 
       <HStack spacing={8}>
-        {me && <ProfileCard name={me.name} email={me.email} avatar={me.avatar} />}
+        <ProfileCard />
 
         <Button colorScheme="pink" variant="outline" onClick={signOut}>
           Sign out

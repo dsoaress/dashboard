@@ -12,7 +12,7 @@ import { FieldError } from 'react-hook-form'
 
 interface InputProps extends ChakraInputProps {
   name: string
-  label?: string
+  label: string
   icon?: ReactElement
   error?: FieldError
 }

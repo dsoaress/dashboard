@@ -1,23 +1,24 @@
 import { Flex, Stack, Text } from '@chakra-ui/react'
 
+import { useAuth } from '../hooks/useAuth'
 import { Avatar } from './Avatar'
 
-type ProfileCardProps = {
-  name: string
-  email: string
-  avatar?: string
-}
+export function ProfileCard() {
+  const { me } = useAuth()
 
-export function ProfileCard({ name, email, avatar }: ProfileCardProps) {
+  if (!me) {
+    return null
+  }
+
   return (
     <Flex align="center">
-      <Avatar name={name} avatar={avatar} />
+      <Avatar name={me.name} avatar={me.avatar} />
       <Stack spacing={0} ml={3}>
         <Text fontSize="sm" color="gray.600">
-          {name}
+          {me.name}
         </Text>
         <Text fontSize="xs" color="gray.400">
-          {email}
+          {me.email}
         </Text>
       </Stack>
     </Flex>
