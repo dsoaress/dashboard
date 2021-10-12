@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException
-} from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { compare } from 'bcryptjs'
 import dayjs from 'dayjs'
@@ -24,13 +19,13 @@ export class SessionService {
     })
 
     if (!user) {
-      throw new UnauthorizedException()
+      throw new BadRequestException('invalid credentials')
     }
 
     const checkPasswords = await compare(password, user.password)
 
     if (!checkPasswords) {
-      throw new UnauthorizedException()
+      throw new BadRequestException('invalid credentials')
     }
 
     return user
