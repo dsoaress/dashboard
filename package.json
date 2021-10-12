@@ -20,7 +20,8 @@
     "prisma": "yarn prisma:push && yarn prisma:seed",
     "clean": "lerna run clean && rm -rf node_modules",
     "lint": "lerna run lint",
-    "postinstall": "lerna bootstrap"
+    "postinstall": "lerna bootstrap",
+    "postversion": "scripts/postversion"
   },
   "devDependencies": {
     "@nestjs/cli": "8.1.2",
