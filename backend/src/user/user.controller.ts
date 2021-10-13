@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UsePipes,
   ValidationPipe
@@ -31,8 +32,8 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll()
+  findAll(@Query('page') page: number) {
+    return this.userService.findAll(page)
   }
 
   @Get(':id')

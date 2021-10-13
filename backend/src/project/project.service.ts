@@ -8,7 +8,7 @@ import { UpdateProjectDto } from './dto/update-project.dto'
 export class ProjectService {
   constructor(private prisma: PrismaService) {}
 
-  async create({ title, description, status }: CreateProjectDto) {
+  async create(userId: string, { title, description, status }: CreateProjectDto) {
     const project = await this.prisma.project.create({
       data: {
         title,
@@ -16,7 +16,7 @@ export class ProjectService {
         status,
         author: {
           connect: {
-            id: '97a25bd1-f35c-40cf-b9e9-2369bfccb875'
+            id: userId
           }
         }
       },
@@ -42,8 +42,10 @@ export class ProjectService {
     }
   }
 
-  async findAll() {
+  async findAll(page = 1) {
     const projects = await this.prisma.project.findMany({
+      take: 10,
+      skip: 10 * (page - 1),
       orderBy: { createdAt: 'desc' },
       include: {
         author: {
@@ -52,21 +54,25 @@ export class ProjectService {
       }
     })
 
-    return projects.map(project => ({
-      id: project.id,
-      title: project.title,
-      description: project.description,
-      status: project.status,
-      createdAt: project.createdAt,
-      updatedAt: project.updatedAt,
-      author: {
-        id: project.author.id,
-        name: project.author.name,
-        email: project.author.email,
-        avatar: project.author.avatar?.filenameUrl ?? null,
-        role: project.author.role
-      }
-    }))
+    return {
+      page: Number(page),
+      hasMore: projects.length >= 10,
+      data: projects.map(project => ({
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        status: project.status,
+        createdAt: project.createdAt,
+        updatedAt: project.updatedAt,
+        author: {
+          id: project.author.id,
+          name: project.author.name,
+          email: project.author.email,
+          avatar: project.author.avatar?.filenameUrl ?? null,
+          role: project.author.role
+        }
+      }))
+    }
   }
 
   async findOne(id: string) {

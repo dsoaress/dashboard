@@ -1,3 +1,4 @@
+import { Pagination } from './Pagination'
 import { Project } from './Project'
 
 export type Role = 'ADMIN' | 'USER'
@@ -11,4 +12,8 @@ export type User = {
   projects: Omit<Project[], 'author'>
   createdAt: string
   updatedAt: string
+}
+
+export interface Users extends Pagination {
+  data: User[] | []
 }

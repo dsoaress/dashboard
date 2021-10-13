@@ -1,3 +1,4 @@
+import { Pagination } from './Pagination'
 import { User } from './User'
 
 export type Project = {
@@ -8,4 +9,8 @@ export type Project = {
   author: User
   createdAt: string
   updatedAt: string
+}
+
+export interface Projects extends Pagination {
+  data: Project[] | []
 }

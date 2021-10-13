@@ -1,4 +1,4 @@
-import { User } from '../../types/User'
+import { User, Users } from '../../types/User'
 import { queryClient } from '../queryClient'
 import { api } from '.'
 
@@ -11,9 +11,9 @@ export async function getAuthenticatedUser() {
   }
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(page = 1) {
   try {
-    const { data } = await api.get<User[]>('users')
+    const { data } = await api.get<Users>(`users?page=${page}`)
     return data
   } catch (error) {
     console.log(error)
@@ -21,7 +21,7 @@ export async function getAllUsers() {
 }
 
 export function prefetchAllUsers() {
-  queryClient.prefetchQuery('users', getAllUsers)
+  queryClient.prefetchQuery(['users', 1], () => getAllUsers(1))
 }
 
 export async function getUserById(userId: string) {

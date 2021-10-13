@@ -56,8 +56,10 @@ export class UserService {
     }
   }
 
-  async findAll() {
+  async findAll(page = 1) {
     const users = await this.prisma.user.findMany({
+      take: 10,
+      skip: 10 * (page - 1),
       orderBy: { name: 'asc' },
       include: {
         avatar: true,
@@ -65,23 +67,27 @@ export class UserService {
       }
     })
 
-    return users.map(user => ({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar?.filenameUrl ?? null,
-      role: user.role,
-      projects: user.projects.map(project => ({
-        id: project.id,
-        title: project.title,
-        description: project.description,
-        status: project.status,
-        createdAt: project.createdAt,
-        updatedAt: project.updatedAt
-      })),
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    }))
+    return {
+      page: Number(page),
+      hasMore: users.length >= 10,
+      data: users.map(user => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar?.filenameUrl ?? null,
+        role: user.role,
+        projects: user.projects.map(project => ({
+          id: project.id,
+          title: project.title,
+          description: project.description,
+          status: project.status,
+          createdAt: project.createdAt,
+          updatedAt: project.updatedAt
+        })),
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }))
+    }
   }
 
   async findOne(id: string) {

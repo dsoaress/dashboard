@@ -6,9 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  Req,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common'
+import { User } from '@prisma/client'
 
 import { ParametersPipe } from '../common/pipes/parameters.pipe'
 import { CreateProjectDto } from './dto/create-project.dto'
@@ -21,13 +24,13 @@ export class ProjectController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectService.create(createProjectDto)
+  create(@Req() { user }: { user: User }, @Body() createProjectDto: CreateProjectDto) {
+    return this.projectService.create(user.id, createProjectDto)
   }
 
   @Get()
-  findAll() {
-    return this.projectService.findAll()
+  findAll(@Query('page') page: number) {
+    return this.projectService.findAll(page)
   }
 
   @Get(':id')

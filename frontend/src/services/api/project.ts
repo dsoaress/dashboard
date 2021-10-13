@@ -1,10 +1,10 @@
-import { Project } from '../../types/Project'
+import { Project, Projects } from '../../types/Project'
 import { queryClient } from '../queryClient'
 import { api } from '.'
 
-export async function getAllProjects() {
+export async function getAllProjects(page = 1) {
   try {
-    const { data } = await api.get<Project[]>('projects')
+    const { data } = await api.get<Projects>(`projects?page=${page}`)
     return data
   } catch (error) {
     console.log(error)
@@ -12,7 +12,7 @@ export async function getAllProjects() {
 }
 
 export function prefetchAllProjects() {
-  queryClient.prefetchQuery('projects', getAllProjects)
+  queryClient.prefetchQuery(['projects', 1], () => getAllProjects(1))
 }
 
 export async function getProjectById(projectId: string) {
