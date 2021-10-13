@@ -1,13 +1,12 @@
 import { Button, Heading, Text } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { GetServerSideProps, NextPage } from 'next'
+import { NextPage } from 'next'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { Input } from '../../components/Input'
 import { Link } from '../../components/Link'
 import { useAuth } from '../../hooks/useAuth'
-import { guestUserRoute } from '../../utils/guestUserRoute'
 
 export type SignInFormData = {
   email: string
@@ -46,11 +45,5 @@ const SignInPage: NextPage = () => {
     </form>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = guestUserRoute(async () => {
-  return {
-    props: {}
-  }
-})
 
 export default SignInPage

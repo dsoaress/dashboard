@@ -2,7 +2,7 @@ import { User } from '../../types/User'
 import { queryClient } from '../queryClient'
 import { api } from '.'
 
-export async function getMe() {
+export async function getAuthenticatedUser() {
   try {
     const { data } = await api.get<User>('me')
     return data

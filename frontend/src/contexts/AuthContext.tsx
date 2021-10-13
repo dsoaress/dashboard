@@ -15,7 +15,8 @@ type SignUpFormData = {
 }
 
 type AuthContextData = {
-  me?: User
+  user?: User
+  isAuthenticating: boolean
   signIn: (data: SignInFormData) => void
   signUp: (data: SignUpFormData) => void
   signOut: () => void

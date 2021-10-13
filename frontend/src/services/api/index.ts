@@ -7,7 +7,13 @@ import { destroyCookies } from '../../utils/destroyCookies'
 import { setCookies } from '../../utils/setCookies'
 
 export { getAllProjects, getProjectById, prefetchAllProjects, prefetchProjectById } from './project'
-export { getAllUsers, getMe, getUserById, prefetchAllUsers, prefetchUserById } from './user'
+export {
+  getAllUsers,
+  getAuthenticatedUser,
+  getUserById,
+  prefetchAllUsers,
+  prefetchUserById
+} from './user'
 
 let isRefreshing = false
 let failedRequestsQueued: any[] = []

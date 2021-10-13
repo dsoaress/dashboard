@@ -2,9 +2,10 @@ import { useRouter } from 'next/router'
 import { parseCookies } from 'nookies'
 import { ReactNode, useEffect, useState } from 'react'
 
+import { Spinner } from '../../components/Spinner'
 import { AuthContext } from '../../contexts/AuthContext'
 import { useToast } from '../../hooks/useToast'
-import { getMe } from '../../services/api'
+import { getAuthenticatedUser } from '../../services/api'
 import { ProfileFormData } from '../../types/ProfileFormData'
 import { User } from '../../types/User'
 import { destroyCookies } from '../../utils/destroyCookies'
@@ -30,24 +31,48 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter()
   const toast = useToast()
-  const [me, setMe] = useState<User>()
+  const [user, setUser] = useState<User>()
+  const [isAuthenticating, setIsAuthenticating] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const { accessToken } = parseCookies()
 
-    if (accessToken) {
-      getMe()
-        .then(me => setMe(me))
-        .catch(error => console.log(error))
+    async function authenticate() {
+      try {
+        const user = await getAuthenticatedUser()
+        setUser(user)
+
+        if (router.asPath.includes('/auth')) {
+          await router.push('/')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
+      setIsAuthenticating(false)
     }
-  }, [])
+
+    async function redirectToAuth() {
+      if (!router.asPath.includes('/auth')) {
+        await router.push('/auth')
+      }
+
+      setIsAuthenticating(false)
+    }
+
+    if (accessToken) {
+      authenticate()
+    } else {
+      redirectToAuth()
+    }
+  }, [router])
 
   function signIn({ email, password }: SignInFormData) {
     signInAction({
       email,
       password,
-      setMe,
+      setUser,
       setIsLoading,
       router,
       toast
@@ -65,9 +90,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function signOut() {
-    setMe(undefined)
-    destroyCookies()
-    router.push('/auth')
+    router.push('/auth').then(() => {
+      setUser(undefined)
+      destroyCookies()
+    })
   }
 
   function updateProfile(profileFormData: ProfileFormData) {
@@ -81,7 +107,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return (
     <AuthContext.Provider
       value={{
-        me,
+        user,
+        isAuthenticating,
         signIn,
         signUp,
         signOut,
@@ -89,7 +116,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         isLoading
       }}
     >
-      {children}
+      {isAuthenticating ? <Spinner /> : children}
     </AuthContext.Provider>
   )
 }

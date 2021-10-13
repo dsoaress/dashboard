@@ -4,18 +4,25 @@ import { NextRouter } from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
 
 import { SignInFormData } from '../../pages/auth'
-import { api, getMe } from '../../services/api'
+import { api, getAuthenticatedUser } from '../../services/api'
 import { User } from '../../types/User'
 import { setCookies } from '../../utils/setCookies'
 
 interface Props extends SignInFormData {
-  setMe: Dispatch<SetStateAction<User | undefined>>
+  setUser: Dispatch<SetStateAction<User | undefined>>
   setIsLoading: Dispatch<SetStateAction<boolean>>
   router: NextRouter
   toast: (options: UseToastOptions) => void
 }
 
-export async function signInAction({ email, password, setMe, setIsLoading, router, toast }: Props) {
+export async function signInAction({
+  email,
+  password,
+  setUser,
+  setIsLoading,
+  router,
+  toast
+}: Props) {
   setIsLoading(true)
 
   try {
@@ -29,8 +36,8 @@ export async function signInAction({ email, password, setMe, setIsLoading, route
       refreshToken: data.refreshToken
     })
 
-    getMe()
-      .then(data => setMe(data))
+    getAuthenticatedUser()
+      .then(data => setUser(data))
       .catch(error => console.log(error))
 
     router.push('/')
